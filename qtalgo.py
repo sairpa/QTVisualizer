@@ -1,9 +1,5 @@
-from flask import Flask, render_template
-import random
-import io
-from flask import Flask, make_response, request
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
@@ -96,52 +92,27 @@ class QuadTree:
             self.sw.draw(ax)
             
 
-app = Flask(__name__, template_folder='templates')
-
 width, height = 500, 500
 N = 10
+coords = np.random.randn(N, 2) * height/3 + (width/2, height/2)
+points = [Point(*coord) for coord in coords]
 
-@app.route("/", methods=['POST','GET'])
-def home():
-    width = request.form['Wval']
-    height = request.form['Hval']
-    N = request.form['Nval']    
-    print(N)
-    print(width)
-    print(height)
-    return render_template('index.html')
-    
-    
+domain = Rect(width/2, height/2, width, height)
+qtree = QuadTree(domain, 3)
+for point in points:
+    qtree.insert(point)
+print('Number of points in the domain =', len(qtree))
 
+fig = plt.figure(figsize=(20,20))
+ax = plt.subplot()
+ax.set_xlim(0, width)
+ax.set_ylim(0, height)
+qtree.draw(ax)
 
-
-
-@app.route('/plot')
-def plot():
-    print(width)
-    coords = np.random.randn(N, 2) * height/3 + (width/2, height/2)
-    points = [Point(*coord) for coord in coords]
-    domain = Rect(width/2, height/2, width, height)
-    qtree = QuadTree(domain, 3)
-    for point in points:
-        qtree.insert(point)
-    fig = plt.figure(figsize=(20,20))
-    ax = plt.subplot()
-    ax.set_xlim(0, width)
-    ax.set_ylim(0, height)
-    qtree.draw(ax)
-    ax.scatter([p.x for p in points], [p.y for p in points], s=35,color="red")
-    ax.set_xticks([0,100,200,300,400,500])
-    ax.set_yticks([0,100,200,300,400,500]);
-
-    canvas = FigureCanvas(fig)
-    output = io.BytesIO()
-    canvas.print_png(output)
-    response = make_response(output.getvalue())
-    response.mimetype = 'image/png'
-    return response
-    
+ax.scatter([p.x for p in points], [p.y for p in points], s=35,color="red")
+ax.set_xticks([0,100,200,300,400,500])
+ax.set_yticks([0,100,200,300,400,500]);
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
+
+

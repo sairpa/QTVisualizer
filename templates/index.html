@@ -6,24 +6,28 @@
     <link rel="stylesheet" href="{{ url_for('static',    filename='css/style.css') }}">
   </head>
   <body>
-    <h1> Quad Tree Visualiser </h1>
-    <p> Flask is Fun </p>
-    <div class="slidecontainer">
-      <input id="rangeInput" type="range" min="0" max="200" oninput="amount.value=rangeInput.value" />
-      <input id="amount" type="number" value="100" min="0" max="200" oninput="rangeInput.value=amount.value" /> 
-    </div>
-    <div class="slidecontainer">
-      <input id="rangeInput" type="range" min="0" max="200" oninput="amount.value=rangeInput.value" />
-      <input id="amount" type="number" value="100" min="0" max="200" oninput="rangeInput.value=amount.value" /> 
-    </div>
-    <div class="slidecontainer">
-      <input id="rangeInput" type="range" min="0" max="200" oninput="amount.value=rangeInput.value" />
-      <input id="amount" type="number" value="100" min="0" max="200" oninput="rangeInput.value=amount.value" /> 
-    </div>
-    <div class="slidecontainer">
-      <input id="rangeInput" type="range" min="0" max="200" oninput="amount.value=rangeInput.value" />
-      <input id="amount" type="number" value="100" min="0" max="200" oninput="rangeInput.value=amount.value" /> 
-    </div>
+    <form action = "http://localhost:5000/" method="POST">
     
+    <h1> Quad Tree Visualiser </h1>
+    <div class="slidecontainer">
+      <input id="rangeInput"  type="range" value="100" min="0" max="500" oninput="amount.value=rangeInput.value" />
+      <input id="amount" name="Nval" type="number" value="100" min="0" max="200" oninput="rangeInput.value=amount.value" /> 
+    </div>
+    <div class="slidecontainer">
+      <input id="rrangeInput" type="range" min="0" value="100" max="500" oninput="aamount.value=rrangeInput.value" />
+      <input id="aamount" name="Hval" type="number" value="100" min="0" max="200" oninput="rrangeInput.value=aamount.value" /> 
+    </div>
+    <div class="slidecontainer">
+      <input id="rrrangeInput" type="range" min="0" value="10" max="50" oninput="aaamount.value=rrrangeInput.value" />
+      <input id="aaamount" name="Wval" type="number" value="10" min="0" max="200" oninput="rrrangeInput.value=aaamount.value" /> 
+    </div>
+
+    <p align="center">
+      <a href="plot" >
+        <button type="button" class=grey style="height:75px;width:150px">Visualise QT</button>
+      </a>
+    </p>
+
+    </form>
   </body>
 </html> 
