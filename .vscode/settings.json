@@ -1,4 +1,4 @@
 {
-    "python.pythonPath": "E:\\Apps\\Py\\python.exe",
+    "python.pythonPath": "/usr/bin/python3",
     "VSCord.enabled": false
 }

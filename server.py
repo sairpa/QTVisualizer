@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 import random
 import io
 from flask import Flask, make_response, request
@@ -7,6 +7,10 @@ from matplotlib.figure import Figure
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
+from bs4 import BeautifulSoup
+import urllib.request
+from re import sub
+
 
 class Point:
     def __init__(self, x, y):
@@ -99,41 +103,84 @@ class QuadTree:
 app = Flask(__name__, template_folder='templates')
 
 width, height = 500, 500
-N = 10
+N = 20
 
-@app.route("/", methods=['POST','GET'])
+@app.route("/")
+def root():
+    wiki_link = "https://en.wikipedia.org/wiki/Quadtree"
+    wiki_page = urllib.request.urlopen(wiki_link)
+    wiki_soup = BeautifulSoup(wiki_page, 'html.parser')
+    wiki_soup.prettify()
+    title = wiki_soup.find(id="firstHeading")
+    print(title.string)
+    wiki_content=wiki_soup.find_all(id="mw-content-text")
+    wiki_desc_raw = wiki_soup.find_all('p')
+    wiki_desc = [comment.text for comment in wiki_desc_raw]
+    print(wiki_desc[0])
+    gfg_link = "https://www.geeksforgeeks.org/quad-tree/"
+    gfg_page = urllib.request.urlopen(gfg_link)
+    gfg_soup = BeautifulSoup(gfg_page, 'lxml')
+    gfg_div_text = gfg_soup.find_all("div", attrs={'class': 'text'})
+    gfg_desc_raw = gfg_soup.find_all('p')
+    gfg_desc = [comment.text for comment in gfg_desc_raw]
+    print(gfg_desc[0])  # gfg description
+    gfg_steps_raw = gfg_soup.find_all('ol')
+    gfg_steps = [comment.text for comment in gfg_steps_raw]
+    print(gfg_steps[0])  # steps to construct a quadtree
+    print(gfg_desc[2])  # insert function
+    print(gfg_desc[3])  # search function
+    return """
+    <head>
+   <title>My title</title>
+   <link rel="stylesheet" href="{{ url_for('static',    filename='css/style.css') }}">
+</head>
+<body>  
+    <h1>Visible stuff goes here</h1>
+    <p>here's a paragraph, fwiw</p>
+    <p>And here's an image:</p>
+    <a href="https://www.flickr.com/photos/zokuga/14615349406/">
+        <img src="http://stash.compjour.org/assets/images/sunset.jpg" alt="it's a nice sunset">
+    </a>
+</body>
+    """
+ 
+
+@app.route("/viz", methods=['POST','GET'])
 def home():
-    width = request.form['Wval']
-    height = request.form['Hval']
-    N = request.form['Nval']    
-    print(N)
-    print(width)
-    print(height)
-    return render_template('index.html')
+    if request.method == 'POST':  
+        width = request.form.get("W")
+        height = request.form.get("H")
+        N = request.form.get("N")
+        print(N,width,height)
+        return redirect(url_for('plot',Wi= width, He = height, No = N))
+    else:
+        return render_template('index.html')
     
     
 
-
-
-
-@app.route('/plot')
-def plot():
-    print(width)
+@app.route('/plot/<Wi>/<He>/<No>')
+def plot(Wi,He,No):
+    width = int(Wi)
+    height = int(He)
+    N = int(No)
+    print(Wi,He,No)
     coords = np.random.randn(N, 2) * height/3 + (width/2, height/2)
     points = [Point(*coord) for coord in coords]
     domain = Rect(width/2, height/2, width, height)
     qtree = QuadTree(domain, 3)
     for point in points:
         qtree.insert(point)
+    print('Number of points in the domain =', len(qtree))
+
     fig = plt.figure(figsize=(20,20))
     ax = plt.subplot()
     ax.set_xlim(0, width)
     ax.set_ylim(0, height)
     qtree.draw(ax)
-    ax.scatter([p.x for p in points], [p.y for p in points], s=35,color="red")
+
+    ax.scatter([p.x for p in points], [p.y for p in points], s=35, color= "RED")
     ax.set_xticks([0,100,200,300,400,500])
     ax.set_yticks([0,100,200,300,400,500]);
-
     canvas = FigureCanvas(fig)
     output = io.BytesIO()
     canvas.print_png(output)

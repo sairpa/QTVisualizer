@@ -1,3 +1,4 @@
+{% block content %}
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -6,28 +7,26 @@
     <link rel="stylesheet" href="{{ url_for('static',    filename='css/style.css') }}">
   </head>
   <body>
-    <form action = "http://localhost:5000/" method="POST">
+    <form action = "http://localhost:5000/viz" method="post">
     
     <h1> Quad Tree Visualiser </h1>
-    <div class="slidecontainer">
-      <input id="rangeInput"  type="range" value="100" min="0" max="500" oninput="amount.value=rangeInput.value" />
-      <input id="amount" name="Nval" type="number" value="100" min="0" max="200" oninput="rangeInput.value=amount.value" /> 
+    <div class="slidecontainer0">
+      <input id="rangeInput"  type="range" value="100" min="0" max="500" oninput="Nval.value=rangeInput.value" />
+      <input name="W" id="Nval" type="number" value="100" min="0" max="500" oninput="rangeInput.value=Nval.value" /> 
     </div>
-    <div class="slidecontainer">
-      <input id="rrangeInput" type="range" min="0" value="100" max="500" oninput="aamount.value=rrangeInput.value" />
-      <input id="aamount" name="Hval" type="number" value="100" min="0" max="200" oninput="rrangeInput.value=aamount.value" /> 
+    <div class="slidecontainer1">
+      <input id="rrangeInput" type="range" min="0" value="100" max="500" oninput="Hval.value=rrangeInput.value" />
+      <input name="H" id="Hval" type="number" value="100" min="0" max="500" oninput="rrangeInput.value=Hval.value" /> 
     </div>
-    <div class="slidecontainer">
-      <input id="rrrangeInput" type="range" min="0" value="10" max="50" oninput="aaamount.value=rrrangeInput.value" />
-      <input id="aaamount" name="Wval" type="number" value="10" min="0" max="200" oninput="rrrangeInput.value=aaamount.value" /> 
+    <div class="slidecontainer2">
+      <input id="rrrangeInput" type="range" min="0" value="10" max="50" oninput="Wval.value=rrrangeInput.value" />
+      <input name="N" id="Wval"  type="number" value="10" min="0" max="500" oninput="rrrangeInput.value=Wval.value" /> 
     </div>
 
-    <p align="center">
-      <a href="plot" >
-        <button type="button" class=grey style="height:75px;width:150px">Visualise QT</button>
-      </a>
-    </p>
+    <p><input type = "submit" value = "submit" /></p>
 
     </form>
   </body>
 </html> 
+
+{% endblock %}
