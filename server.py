@@ -1,7 +1,6 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for,make_response, request
 import random
 import io
-from flask import Flask, make_response, request
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import numpy as np
@@ -124,25 +123,15 @@ def root():
     gfg_desc_raw = gfg_soup.find_all('p')
     gfg_desc = [comment.text for comment in gfg_desc_raw]
     print(gfg_desc[0])  # gfg description
+    k = gfg_desc[0]
     gfg_steps_raw = gfg_soup.find_all('ol')
     gfg_steps = [comment.text for comment in gfg_steps_raw]
-    print(gfg_steps[0])  # steps to construct a quadtree
-    print(gfg_desc[2])  # insert function
-    print(gfg_desc[3])  # search function
-    return """
-    <head>
-   <title>My title</title>
-   <link rel="stylesheet" href="{{ url_for('static',    filename='css/style.css') }}">
-</head>
-<body>  
-    <h1>Visible stuff goes here</h1>
-    <p>here's a paragraph, fwiw</p>
-    <p>And here's an image:</p>
-    <a href="https://www.flickr.com/photos/zokuga/14615349406/">
-        <img src="http://stash.compjour.org/assets/images/sunset.jpg" alt="it's a nice sunset">
-    </a>
-</body>
-    """
+    p = gfg_steps[0]
+    p = p.split(".")
+    print(p)
+    t = p[1]
+    return render_template('home.html',p1val=title.string, p2val=wiki_desc[0],p3val=k[:138], 
+    p4val=k[139:],p5val= p[0], p6val=t[:-32], p7val = t[-32:])
  
 
 @app.route("/viz", methods=['POST','GET'])
@@ -181,6 +170,8 @@ def plot(Wi,He,No):
     ax.scatter([p.x for p in points], [p.y for p in points], s=35, color= "RED")
     ax.set_xticks([0,100,200,300,400,500])
     ax.set_yticks([0,100,200,300,400,500]);
+    
+    
     canvas = FigureCanvas(fig)
     output = io.BytesIO()
     canvas.print_png(output)

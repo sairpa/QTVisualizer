@@ -1,4 +1,3 @@
-{% block content %}
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -10,23 +9,24 @@
     <form action = "http://localhost:5000/viz" method="post">
     
     <h1> Quad Tree Visualiser </h1>
+    <p> Width</p>
     <div class="slidecontainer0">
       <input id="rangeInput"  type="range" value="100" min="0" max="500" oninput="Nval.value=rangeInput.value" />
       <input name="W" id="Nval" type="number" value="100" min="0" max="500" oninput="rangeInput.value=Nval.value" /> 
     </div>
+    <p> Height</p>
     <div class="slidecontainer1">
       <input id="rrangeInput" type="range" min="0" value="100" max="500" oninput="Hval.value=rrangeInput.value" />
       <input name="H" id="Hval" type="number" value="100" min="0" max="500" oninput="rrangeInput.value=Hval.value" /> 
     </div>
+    <p> No of Points</p>
     <div class="slidecontainer2">
       <input id="rrrangeInput" type="range" min="0" value="10" max="50" oninput="Wval.value=rrrangeInput.value" />
       <input name="N" id="Wval"  type="number" value="10" min="0" max="500" oninput="rrrangeInput.value=Wval.value" /> 
     </div>
 
-    <p><input type = "submit" value = "submit" /></p>
+    <p><input type = "submit" value = "Visualize QT" /></p>
 
     </form>
   </body>
 </html> 
-
-{% endblock %}
